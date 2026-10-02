@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AP Government Study Cards</title>
+<style>
+:root{--bg:#eceff4;--surface:#fbfcfd;--ink:#14233c;--muted:#55627a;--line:#cdd5e1;--brass:#9a6d12;--front:#14233c;--on-front:#f4f6fa;--good:#1f7a4d;--goodbg:#e3f3ea;--bad:#b3261e;--badbg:#fbe8e6;--serif:Georgia,"Times New Roman",serif;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1524;--surface:#16223a;--ink:#e8ecf4;--muted:#9aa7bf;--line:#2b3b58;--brass:#d9a441;--front:#22365c;--good:#5fd09a;--goodbg:#143527;--bad:#ff8a80;--badbg:#3a1a1a}}
+:root[data-theme="dark"]{--bg:#0d1524;--surface:#16223a;--ink:#e8ecf4;--muted:#9aa7bf;--line:#2b3b58;--brass:#d9a441;--front:#22365c;--good:#5fd09a;--goodbg:#143527;--bad:#ff8a80;--badbg:#3a1a1a}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--sans)}
+main{max-width:760px;margin:0 auto;padding:20px 16px 48px}
+h1{font:700 1.7rem/1.2 var(--serif);margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 18px;font-size:.95rem}
+button,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin-bottom:22px}
+.tab{background:none;border:0;padding:10px 16px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--brass)}
+.btn{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 16px;font-weight:600}
+.btn:hover{border-color:var(--brass)}
+.btn.primary{background:var(--front);color:var(--on-front);border-color:var(--front)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;margin-top:16px}
+select{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 10px;max-width:100%}
+.meta{text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:10px}
+/* flip card */
+.card{perspective:1400px;cursor:pointer;border-radius:14px}
+.inner{display:grid;transition:transform .55s;transform-style:preserve-3d;min-height:340px}
+.card.flipped .inner{transform:rotateY(180deg)}
+.card.noanim .inner{transition:none}
+.face{grid-area:1/1;border-radius:14px;padding:26px 24px;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.face.f{background:var(--front);color:var(--on-front);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px}
+.face.f h2{font:700 2rem/1.2 var(--serif);margin:0}
+.face.f .full{opacity:.8;font-size:.95rem}
+.face.f .hint{position:absolute;bottom:14px;font-size:.8rem;opacity:.65}
+.face.b{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--brass);transform:rotateY(180deg)}
+.face.b .term{font:700 1.3rem/1.25 var(--serif);margin:0 0 12px}
+.f{position:relative}
+.sec{margin-bottom:12px}
+.sec h4{margin:0 0 2px;font:700 .95rem var(--serif);color:var(--brass)}
+.sec p{margin:0}
+.sec ul{margin:4px 0 0;padding-left:20px}
+.sec li{margin-bottom:4px}
+/* quiz */
+.setup{text-align:center}
+.setup p{color:var(--muted)}
+.qterm{font:700 1.7rem/1.25 var(--serif);text-align:center;margin:6px 0 4px}
+.qhelp{text-align:center;color:var(--muted);margin:0 0 16px;font-size:.95rem}
+.qbar{display:flex;justify-content:space-between;color:var(--muted);font-size:.9rem;margin-bottom:8px}
+.track{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:18px}
+.track i{display:block;height:100%;background:var(--brass)}
+.opt{display:flex;gap:12px;width:100%;text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.opt:hover:not(:disabled){border-color:var(--brass)}
+.opt:disabled{cursor:default}
+.opt .let{flex:none;width:28px;height:28px;border-radius:50%;background:var(--front);color:var(--on-front);display:grid;place-items:center;font-weight:700;font-size:.9rem}
+.opt.right{border-color:var(--good);background:var(--goodbg)}
+.opt.wrong{border-color:var(--bad);background:var(--badbg)}
+.fb{font-weight:700;margin:4px 0 12px;text-align:center}
+.fb.good{color:var(--good)}.fb.bad{color:var(--bad)}
+.score{font:700 3rem/1 var(--serif);text-align:center;margin:10px 0 4px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:700;font-family:var(--serif)}
+details .sec:first-of-type{margin-top:10px}
+/* memory game */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tile{display:flex;perspective:900px;background:none;border:0;padding:0;border-radius:10px;text-align:left}
+.tile .inner{flex:1;min-height:120px;transition:transform .4s}
+.tile.open .inner,.tile.done .inner{transform:rotateY(180deg)}
+.tile .face{padding:10px;border-radius:10px}
+.tile .down{background:var(--front);color:var(--on-front);display:grid;place-items:center;font:700 2rem var(--serif)}
+.tile .up{transform:rotateY(180deg);background:var(--surface);border:1px solid var(--line);font-size:.8rem;line-height:1.4;border-top:5px solid var(--muted)}
+.tile.term .up{border-top-color:var(--brass);font:700 1rem/1.25 var(--serif);display:flex;align-items:center;justify-content:center;text-align:center}
+.tile.done .up{background:var(--goodbg);border-color:var(--good)}
+.tile.term.done .up{border-top-color:var(--good)}
+.tile ul{margin:0;padding-left:16px}
+.key{display:flex;gap:16px;justify-content:center;color:var(--muted);font-size:.85rem;margin:-6px 0 14px}
+.win{background:var(--goodbg);border:2px solid var(--good);border-radius:12px;padding:14px;text-align:center;margin-bottom:16px}
+.win b{font:700 1.2rem var(--serif)}
+[hidden]{display:none!important}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.mtile{display:flex;align-items:center;justify-content:center;text-align:center;min-height:96px;padding:12px;border-radius:10px;border:2px solid var(--line);user-select:none;-webkit-user-select:none;cursor:pointer;transition:opacity .3s,border-color .15s;font-size:.85rem;line-height:1.4}
+.mtile[data-k=t]{background:var(--front);color:var(--on-front);border-color:var(--front);font:700 1.05rem/1.25 var(--serif)}
+.mtile[data-k=d]{background:var(--surface)}
+.mtile.sel{border-color:var(--brass);box-shadow:0 0 0 3px var(--brass)}
+.mtile.bad{border-color:var(--bad);background:var(--badbg);color:var(--ink);animation:shake .4s}
+.mtile.gone{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s,visibility 0s .3s}
+.mtile.drag{z-index:5;cursor:grabbing;transition:none;box-shadow:0 8px 20px rgba(0,0,0,.35);touch-action:none}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@media (prefers-reduced-motion:reduce){.inner{transition:none}.mtile.bad{animation:none}}
+@media (max-width:480px){.mgrid{grid-template-columns:1fr 1fr}.mtile[data-k=d]{font-size:.78rem}.mtile[data-k=t]{font-size:.95rem}}
+@media (max-width:480px){.face.f h2{font-size:1.6rem}.qterm{font-size:1.4rem}}
+</style>
+</head>
+<body>
+<main>
+<h1>AP Government Study Cards</h1>
+<p class="sub">53 cards: flip through them, take a fresh quiz, play the memory game, or race the clock in Match.</p>
+<div class="tabs" role="tablist">
+  <button class="tab" role="tab" id="t-cards" aria-selected="true">Flashcards</button>
+  <button class="tab" role="tab" id="t-quiz" aria-selected="false">Quiz</button>
+  <button class="tab" role="tab" id="t-game" aria-selected="false">Memory Game</button>
+  <button class="tab" role="tab" id="t-match" aria-selected="false">Match</button>
+</div>
+
+<section id="cards">
+  <div class="meta" id="count"></div>
+  <div class="card" id="card" role="button" tabindex="0" aria-label="Flashcard. Press to flip.">
+    <div class="inner">
+      <div class="face f" id="front"></div>
+      <div class="face b" id="backface"></div>
+    </div>
+  </div>
+  <div class="row">
+    <button class="btn" id="prev">Previous</button>
+    <button class="btn primary" id="flip">Flip card</button>
+    <button class="btn" id="next">Next</button>
+  </div>
+  <div class="row">
+    <select id="jump" aria-label="Jump to a card"></select>
+    <button class="btn" id="shuf">Shuffle</button>
+  </div>
+</section>
+
+<section id="quiz" hidden></section>
+<section id="game" hidden></section>
+<section id="match" hidden></section>
+</main>
+
+<script>
+const CARDS = [{"n": 1, "title": "Social Contract", "front": "Social Contract", "what": "An agreement where citizens surrender total, absolute freedom in exchange for government protection of natural rights and public order (Locke, Rousseau).", "sig": "Establishes that government legitimacy and authority are conditional upon protecting citizen safety and rights rather than maintaining absolute power.", "conn": "Serves as a foundational Enlightenment ideal directly embedded into the Declaration of Independence and the U.S. Constitution.", "sub": []}, {"n": 2, "title": "Direct Democracy", "front": "Direct Democracy", "what": "A governance model where citizens participate directly in voting on policy decisions and political actions rather than through elected representatives.", "sig": "Viewed by the Framers as impractical for a large nation and dangerously susceptible to majority tyranny and mob rule.", "conn": "Preserved locally in town hall meetings; contrasted with Madison’s extended republic defense in Federalist No. 10.", "sub": []}, {"n": 3, "title": "Indirect Democracy (Representative Republic)", "front": "Indirect Democracy", "what": "A political system in which voters elect representatives to make laws and govern on their behalf.", "sig": "Structures national authority to balance public participation with institutional stability and elite deliberation.", "conn": "The primary model established by the U.S. Constitution, expressed through the House of Representatives, Senate, and Electoral College.", "sub": []}, {"n": 4, "title": "Participatory Democracy", "front": "Participatory Democracy", "what": "A model of representative democracy that emphasizes broad, direct citizen involvement in politics and civil society.", "sig": "Empowers individual citizens and local grass-roots movements to shape government decision-making.", "conn": "Applied modernly through state ballot initiatives (citizens petitioning laws onto ballots) and state referendums.", "sub": []}, {"n": 5, "title": "Pluralist Democracy", "front": "Pluralist Democracy", "what": "A model of democracy centered on group-based competition where non-governmental interest groups compete and bargain to influence policy.", "sig": "Prevents any single group from dominating policymaking through continuous negotiation, though it can slow the legislative process.", "conn": "Core argument of Federalist No. 10; driven by interest groups like the NAACP, AFL-CIO, and NRA lobbying Congress.", "sub": []}, {"n": 6, "title": "Elite Democracy", "front": "Elite Democracy", "what": "A model where elected representatives act as trustees, with political decision-making dominated by resource-rich, highly educated, or wealthy elites.", "sig": "Limits direct popular impulse by placing governing authority in the hands of established leaders.", "conn": "Reflected in the Electoral College, lifetime federal judicial appointments, and original selection of Senators by state legislatures.", "sub": []}, {"n": 7, "title": "Republic / Republicanism", "front": "Republic / Republicanism", "what": "A system of governance in which sovereign power resides in the people, who elect representatives to exercise power and enact laws.", "sig": "Prevents tyranny by a monarch or temporary majority mob by inserting representative institutions and checks.", "conn": "Defended by Madison in Federalist No. 10 and codified in the U.S. Constitution via separation of powers.", "sub": []}, {"n": 8, "title": "Popular Sovereignty", "front": "Popular Sovereignty", "what": "The constitutional principle that government authority and legitimacy derive directly from the consent of the governed.", "sig": "Establishes that citizens retain ultimate political power and have the right to alter or abolish oppressive governments.", "conn": "Foundational principle of the Declaration of Independence and the Preamble of the U.S. Constitution.", "sub": []}, {"n": 9, "title": "Limited Government", "front": "Limited Government", "what": "Institutional restrictions placed on governmental power to prevent tyranny and safeguard personal liberties.", "sig": "Ensures federal and state authorities operate strictly within defined constitutional boundaries.", "conn": "Maintained through separation of powers, checks and balances, Article I Section 9 limits, and the Bill of Rights.", "sub": []}, {"n": 10, "title": "Natural Law / Natural Rights", "front": "Natural Rights", "what": "Inherent human rights every individual is born with that government cannot infringe upon or take away (Locke).", "sig": "Forms the moral basis for individual liberty and constitutional limits on state power.", "conn": "Embedded into the Declaration of Independence as \"life, liberty, and the pursuit of happiness\".", "sub": []}, {"n": 11, "title": "Declaration of Independence", "front": "Declaration of Independence", "what": "Foundational document drafted by Thomas Jefferson and the Committee of Five, adopted July 4, 1776.", "sig": "Formally declared colonial independence from Great Britain by listing grievances against King George III.", "conn": "Codified natural rights, social contract theory, and popular sovereignty as the moral justification for American democracy.", "sub": []}, {"n": 12, "title": "Gettysburg Address", "front": "Gettysburg Address", "what": "A historic speech delivered by President Abraham Lincoln in November 1863 at the dedication of the Soldiers' National Cemetery in Gettysburg, Pennsylvania.", "sig": "Reframed the Civil War as a moral struggle for human equality, human liberty, and democratic governance (\"government of the people, by the people, for the people\").", "conn": "Reaffirms the core principles of human equality and popular sovereignty established in the Declaration of Independence; demonstrates how founding republican ideals evolve during national crises.", "sub": []}, {"n": 13, "title": "U.S. Constitution", "front": "U.S. Constitution", "what": "Supreme law of the United States framed in 1787 to replace the Articles of Confederation.", "sig": "Created a three-branch federal republic based on enumerated powers, national supremacy, and structural checks.", "conn": "Connects Articles I–VII with formal amendment procedures in Article V to balance flexibility with stability.", "sub": []}, {"n": 14, "title": "Articles of Confederation", "front": "Articles of Confederation", "what": "First national constitution of the U.S. (1781–1789), establishing a \"firm league of friendship\" among 13 sovereign states.", "sig": "Deliberately created a weak national government without an executive branch, federal judiciary, or power to tax and regulate commerce.", "conn": "Structural weaknesses revealed by Shays' Rebellion led directly to the 1787 Constitutional Convention.", "sub": []}, {"n": 15, "title": "Shays' Rebellion", "front": "Shays' Rebellion", "what": "A 1786 armed uprising of impoverished Massachusetts farmers led by Daniel Shays against farm foreclosures and taxes.", "sig": "Exposed the central government's inability to maintain domestic tranquility or raise a military under the Articles of Confederation.", "conn": "Primary catalyst persuading national leaders to convene in Philadelphia to replace the Articles with a stronger Constitution.", "sub": []}, {"n": 16, "title": "Virginia Plan / New Jersey Plan", "front": "Virginia Plan vs. New Jersey Plan", "what": "Two opposing constitutional proposals: Virginia Plan sought population-based bicameral representation; New Jersey Plan sought equal state representation in a unicameral legislature.", "sig": "Pitted large states favoring strong national authority against small states protecting state sovereignty.", "conn": "Reconciled by Roger Sherman and the Grand Committee through the Great Compromise.", "sub": []}, {"n": 17, "title": "Great Compromise", "front": "Great Compromise (Connecticut Compromise)", "what": "Constitutional agreement forging a bicameral Congress consisting of the House of Representatives (by population) and the Senate (two seats per state).", "sig": "Reconciled representation disputes between large and small population states.", "conn": "Formed the core legislative structure detailed in Article I of the U.S. Constitution.", "sub": []}, {"n": 18, "title": "Bicameral Legislature", "front": "Bicameral Legislature", "what": "A lawmaking body divided into two distinct chambers (the House of Representatives and the Senate).", "sig": "Prevents hasty majoritarian legislation by requiring consensus across two chambers with different terms and constituencies.", "conn": "Described in Federalist No. 51 as an essential internal check on legislative power.", "sub": []}, {"n": 19, "title": "Three-Fifths Compromise", "front": "Three-Fifths Compromise", "what": "Constitutional agreement counting three out of every five enslaved individuals toward state population totals.", "sig": "Determined House of Representatives seat apportionment and direct federal tax burdens.", "conn": "Represents a key sectional compromise between Northern and Southern states at the Constitutional Convention.", "sub": []}, {"n": 20, "title": "Slave Trade Compromise", "front": "Slave Trade Compromise (Importation Clause)", "what": "Constitutional provision barring Congress from prohibiting the international slave trade for 20 years (until 1808).", "sig": "Protected Southern agricultural economic interests in exchange for federal interstate commerce regulation power.", "conn": "Paired with Article IV's Extradition Clause as part of the Constitutional Convention's slavery compromises.", "sub": []}, {"n": 21, "title": "Separation of Powers", "front": "Separation of Powers", "what": "Constitutional distribution of national authority across distinct legislative, executive, and judicial branches.", "sig": "Dilutes federal power to prevent branch concentration and majoritarian tyranny (Montesquieu).", "conn": "Creates multiple institutional access points for citizens and interest groups to shape policy.", "sub": []}, {"n": 22, "title": "Checks and Balances", "front": "Checks and Balances", "what": "Constitutional mechanisms enabling each government branch to limit, modify, or block actions of the other branches.", "sig": "Ensures no single branch consolidates absolute control (e.g., presidential vetoes, Senate advice and consent, judicial review).", "conn": "Operationalizes Madison's principle in Federalist No. 51 that \"ambition must be made to counteract ambition\".", "sub": []}, {"n": 23, "title": "Federal System / Federalism", "front": "Federal System / Federalism", "what": "Governing arrangement where political power is divided and shared between a central national government and regional state governments.", "sig": "Balances national power for uniform issues with state police powers for local governance.", "conn": "Anchored constitutionally by the Article VI Supremacy Clause and the Tenth Amendment.", "sub": []}, {"n": 24, "title": "Post-9/11 Surveillance", "front": "Post-9/11 Surveillance", "what": "Expanded federal intelligence gathering and bulk data collection programs (e.g., USA PATRIOT Act) instituted after the September 11 attacks.", "sig": "Sparked national debate over the constitutional balance between national security demands and personal Fourth Amendment civil liberties.", "conn": "Relates directly to limited government principles, Fourth Amendment protections against unreasonable searches, and executive branch expansion during national crises.", "sub": []}, {"n": 25, "title": "Amendment Process (Article V)", "front": "Amendment Process (Article V)", "what": "Two-stage constitutional process requiring a 2/3 proposal vote in Congress (or state convention) and ratification by 3/4 of state legislatures (or conventions).", "sig": "Allows the Constitution to adapt over time while maintaining a rigorous bar to safeguard fundamental structural rules.", "conn": "Illustrates federalism by combining national proposal mechanisms with state-level ratification.", "sub": []}, {"n": 26, "title": "Necessary and Proper Clause", "front": "Necessary and Proper Clause (Elastic Clause)", "what": "Article I, Section 8 provision authorizing Congress to make all laws necessary and proper for executing its delegated powers.", "sig": "Serves as the primary constitutional foundation for congressional implied powers.", "conn": "Upheld in McCulloch v. Maryland (1819) to validate the creation of a national bank.", "sub": []}, {"n": 27, "title": "Enumerated, Implied, Concurrent, and Reserved Powers", "front": "Division of Constitutional Powers", "what": "", "sig": "Delineates operational jurisdictional limits across federal and state levels.", "conn": "Ongoing tension between implied/enumerated powers and reserved state powers drives federalism disputes.", "sub": ["Enumerated: Powers explicitly stated in Article I, Section 8 (coining money, declaring war).", "Implied: Powers deduced via Elastic Clause (national bank).", "Concurrent: Shared powers exercised by national and state levels simultaneously (taxation, operating courts).", "Reserved: Powers retained by states under the 10th Amendment (public health, safety, education)."]}, {"n": 28, "title": "Commerce Clause", "front": "Commerce Clause", "what": "Article I, Section 8 clause empowering Congress to regulate commerce with foreign nations and among the states.", "sig": "Serves as the primary constitutional vehicle for expanding federal regulatory power over economic and social policy.", "conn": "Expanded broadly in Gibbons v. Ogden; restricted in United States v. Lopez (1995).", "sub": []}, {"n": 29, "title": "Electoral College", "front": "Electoral College", "what": "Indirect presidential selection system where states appoint electors equal to their total congressional delegation.", "sig": "Balances popular voter input with elite deliberation and state-level representation.", "conn": "Reflects constitutional compromises between elite democracy, federalism, and popular vote input.", "sub": []}, {"n": 30, "title": "Veto / Pocket Veto", "front": "Veto / Pocket Veto", "what": "Executive rejection of congressional legislation (Article I, Section 7). A pocket veto occurs when a bill is unsigned for 10 days while Congress is adjourned.", "sig": "Serves as the primary presidential check on legislative lawmaking power.", "conn": "Congress can check a standard presidential veto with a 2/3 override vote in both chambers.", "sub": []}, {"n": 31, "title": "Impeachment", "front": "Impeachment", "what": "Formal constitutional process for charging federal officials with misconduct; House impeaches, Senate conducts trial.", "sig": "Vital legislative check on executive and judicial officials requiring a 2/3 Senate vote to convict and remove.", "conn": "Exemplifies checks and balances detailed in Articles I and II.", "sub": []}, {"n": 32, "title": "Supremacy Clause", "front": "Supremacy Clause", "what": "Article VI provision dictating that the U.S. Constitution, federal statutes, and national treaties override conflicting state laws.", "sig": "Establishes national legal supremacy over state enactments when jurisdictions overlap.", "conn": "Applied decisively in McCulloch v. Maryland (1819) to strike down state taxation of federal entities.", "sub": []}, {"n": 33, "title": "Federalist vs. Anti-Federalist Debate", "front": "Federalist vs. Anti-Federalist Debate", "what": "Post-1787 debate between Federalists supporting constitutional ratification and Anti-Federalists fearing federal tyranny and state erosion.", "sig": "Established the foundational national conflict over central federal power versus state sovereignty and local representation.", "conn": "Resolved through the compromise addition of the Bill of Rights in 1791.", "sub": []}, {"n": 34, "title": "Federalist No. 10", "front": "Federalist No. 10", "what": "Essay by James Madison arguing that a large extended republic naturally controls the dangers of factions.", "sig": "Explains that a large nation incorporates diverse interest groups, forcing bargaining and preventing majority tyranny.", "conn": "Serves as the foundational defense of pluralist democracy.", "sub": []}, {"n": 35, "title": "Federalist No. 39", "front": "Federalist No. 39", "what": "Essay by James Madison defining the republican nature of the proposed U.S. Constitution.", "sig": "Demonstrates that the government is strictly a republic deriving power from the people, and explains that the constitutional structure is a hybrid: partly federal (states act as sovereign entities) and partly national (government acts directly on individuals).", "conn": "Outlines the theoretical framework of American federalism and republicanism to address Anti-Federalist fears of central overreach.", "sub": []}, {"n": 36, "title": "Federalist No. 51", "front": "Federalist No. 51", "what": "Essay by James Madison explaining how internal structural design guards against federal tyranny.", "sig": "Establishes that separation of powers, bicameralism, and checks and balances keep government in check (\"ambition must be made to counteract ambition\").", "conn": "Outlines the \"auxiliary precautions\" built into the U.S. Constitution to safeguard liberty.", "sub": []}, {"n": 37, "title": "Brutus No. 1", "front": "Brutus No. 1", "what": "Anti-Federalist essay arguing that a consolidated national government over a vast territory would destroy state sovereignty.", "sig": "Warns that national representatives would become detached from local constituents, leading to elite control and lost state autonomy.", "conn": "Key counter-argument to Federalist No. 10 favoring decentralized, local government.", "sub": []}, {"n": 38, "title": "Bill of Rights", "front": "Bill of Rights", "what": "The first ten amendments to the U.S. Constitution, ratified in 1791.", "sig": "Expressly enumerates protections for individual liberties (speech, religion, due process) and reserves non-delegated powers.", "conn": "Adopted as a compromise to satisfy Anti-Federalist demands and secure constitutional ratification.", "sub": []}, {"n": 39, "title": "Tenth Amendment", "front": "Tenth Amendment", "what": "Constitutional amendment establishing that powers not delegated to the federal government are reserved strictly to the states or people.", "sig": "Serves as the primary constitutional anchor for state sovereignty and police powers.", "conn": "Operates in continuous constitutional tension with the Commerce Clause and Supremacy Clause.", "sub": []}, {"n": 40, "title": "Limits on Congress", "front": "Limits on Congress (Article I, Section 9)", "what": "Direct constitutional restrictions on federal authority (prohibiting export taxes, ex post facto laws, bills of attainder, and suspending habeas corpus).", "sig": "Guarantees limited government and safeguards fundamental civil liberties.", "conn": "Complemented by Article I, Section 10 limits placed on state governments.", "sub": []}, {"n": 41, "title": "Fourteenth Amendment", "front": "Fourteenth Amendment", "what": "Reconstruction-era amendment granting citizenship and establishing the Due Process Clause and Equal Protection Clause.", "sig": "Expanded federal oversight post-Civil War by prohibiting states from denying equal protection or due process.", "conn": "Applied in Obergefell v. Hodges (2015) to guarantee same-sex marriage nationwide.", "sub": []}, {"n": 42, "title": "Full Faith and Credit Clause", "front": "Full Faith and Credit Clause", "what": "Article IV requirement that states respect and recognize public acts, official records, and judicial decisions of other states.", "sig": "Preserves interstate legal recognition and administrative uniformity across state lines.", "conn": "Central issue in federalism conflicts like the Defense of Marriage Act (DOMA).", "sub": []}, {"n": 43, "title": "Privileges and Immunities Clause", "front": "Privileges and Immunities Clause", "what": "Article IV provision prohibiting states from discriminating against citizens of other states.", "sig": "Protects fundamental travel and civil rights for citizens moving between states.", "conn": "Regulates horizontal federalism between states while allowing valid distinctions like in-state college tuition.", "sub": []}, {"n": 44, "title": "Extradition Clause", "front": "Extradition Clause", "what": "Article IV mandate requiring states to capture and return fleeing criminal fugitives to the state where the crime was committed.", "sig": "Prevents criminal suspects from escaping justice by fleeing across state lines.", "conn": "Key constitutional obligation governing inter-state relations.", "sub": []}, {"n": 45, "title": "Marbury v. Madison (1803)", "front": "Marbury v. Madison (1803)", "what": "Landmark Supreme Court case in which Chief Justice John Marshall declared Section 13 of the Judiciary Act of 1789 unconstitutional.", "sig": "Established the doctrine of judicial review—the authority of the Supreme Court to declare congressional acts or executive actions void if they violate the Constitution.", "conn": "Elevated the judicial branch under Article III into a co-equal branch of government; acts as a primary judicial check within checks and balances.", "sub": []}, {"n": 46, "title": "McCulloch v. Maryland (1819)", "front": "McCulloch v. Maryland (1819)", "what": "Supreme Court ruling over Maryland’s attempt to tax the Second Bank of the United States.", "sig": "Confirmed that Congress holds implied powers under the Necessary and Proper Clause and ruled that states cannot tax federal operations.", "conn": "Established broad federal implied powers and solidified national supremacy under Article VI.", "sub": []}, {"n": 47, "title": "Dred Scott v. Sandford (1857)", "front": "Dred Scott v. Sandford (1857)", "what": "Landmark Supreme Court case ruling that Black Americans were not U.S. citizens and striking down the Missouri Compromise.", "sig": "Declared that Congress lacked constitutional authority under the Fifth Amendment to prohibit slavery in federal territories, escalating regional tensions toward the Civil War.", "conn": "Demonstrates a major failure of judicial interpretation to resolve slavery controversies; directly spurred the passage of the 14th Amendment Citizenship Clause.", "sub": []}, {"n": 48, "title": "Dual Federalism vs. Cooperative Federalism", "front": "Dual Federalism vs. Cooperative Federalism", "what": "Dual Federalism (\"layer cake\") keeps national and state authority strictly separated; Cooperative Federalism (\"marble cake\") involves overlapping federal-state policy collaboration.", "sig": "Marks a historical shift from strict state police power boundaries toward expansive federal regulatory influence.", "conn": "Evolved during the Progressive Era and New Deal via expanded Commerce Clause powers.", "sub": []}, {"n": 49, "title": "Revenue Sharing", "front": "Revenue Sharing", "what": "Direct allocation of federal tax dollars to state and local governments with virtually no spending restrictions (\"no strings\").", "sig": "Provided maximum fiscal discretion to state and local leaders.", "conn": "Used under President Nixon as a tool of fiscal federalism.", "sub": []}, {"n": 50, "title": "Grants-in-Aid (Categorical Grants vs. Block Grants)", "front": "Categorical Grants vs. Block Grants", "what": "Categorical Grants provide federal money for narrow goals with strict conditions (\"strings attached\"); Block Grants provide money for broad policy areas with wide state spending discretion.", "sig": "Categorical grants expand national policy influence, whereas block grants preserve state authority.", "conn": "Primary tools of fiscal federalism used by Congress to shape state actions.", "sub": []}, {"n": 51, "title": "Devolution", "front": "Devolution", "what": "Political movement under New Federalism returning policy authority, program administration, and discretion from the national government to state governments.", "sig": "Reverses centralized national control in favor of state policy autonomy.", "conn": "Implemented via the Unfunded Mandates Reform Act (1995) and Welfare Reform Act (1996).", "sub": []}, {"n": 52, "title": "Mandates / Unfunded Mandates", "front": "Mandates / Unfunded Mandates", "what": "Federal requirements compelling state compliance. Unfunded mandates compel compliance without providing federal dollars to cover costs.", "sig": "Places heavy financial and regulatory burdens on state budgets (e.g., Clean Air Act, Americans with Disabilities Act).", "conn": "Target of state complaints that led to the Unfunded Mandates Reform Act of 1995.", "sub": []}, {"n": 53, "title": "United States v. Lopez (1995)", "front": "United States v. Lopez (1995)", "what": "Supreme Court ruling striking down the federal Gun-Free School Zones Act of 1990.", "sig": "Held that carrying a gun in a local school zone is a non-economic activity that does not substantially affect interstate commerce.", "conn": "Set firm constitutional limits on Commerce Clause powers, reasserting state police powers over public safety.", "sub": []}];
+const $ = s => document.querySelector(s);
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const back = c => {
+  let w = c.what ? `<p>${esc(c.what)}</p>` : '';
+  if (c.sub.length) w += '<ul>' + c.sub.map(s => `<li>${esc(s).replace(/^([^:]+:)/, '<b>$1</b>')}</li>`).join('') + '</ul>';
+  return `<div class="sec"><h4>What is it?</h4>${w}</div><div class="sec"><h4>Significance</h4><p>${esc(c.sig)}</p></div><div class="sec"><h4>Connections</h4><p>${esc(c.conn)}</p></div>`;
+};
+
+/* tabs */
+function tab(which) {
+  ['cards', 'quiz', 'game', 'match'].forEach(s => { $('#' + s).hidden = s !== which; $('#t-' + s).setAttribute('aria-selected', s === which); });
+  if (which === 'match' && !$('#match').innerHTML) mSetup();
+  if (which === 'quiz' && !$('#quiz').innerHTML) setup();
+  if (which === 'game' && !$('#game').innerHTML) gsetup();
+}
+$('#t-cards').onclick = () => tab('cards');
+$('#t-quiz').onclick = () => tab('quiz');
+$('#t-game').onclick = () => tab('game');
+$('#t-match').onclick = () => tab('match');
+
+/* flashcards */
+let order = CARDS.slice(), idx = 0, shuffled = false;
+$('#jump').innerHTML = CARDS.map(c => `<option value="${c.n}">${c.n}. ${esc(c.front)}</option>`).join('');
+function show(keepFlip) {
+  const c = order[idx], el = $('#card');
+  el.classList.add('noanim'); el.classList.remove('flipped'); void el.offsetWidth; el.classList.remove('noanim');
+  $('#front').innerHTML = `<h2>${esc(c.front)}</h2>` + (c.title !== c.front ? `<div class="full">${esc(c.title)}</div>` : '') + `<div class="hint">Card ${c.n}. Tap to flip.</div>`;
+  $('#backface').innerHTML = `<h3 class="term">${esc(c.front)}</h3>` + back(c);
+  $('#count').textContent = `Card ${idx + 1} of ${order.length}` + (shuffled ? ' (shuffled)' : '');
+  $('#jump').value = c.n;
+}
+const flip = () => $('#card').classList.toggle('flipped');
+const go = d => { idx = (idx + d + order.length) % order.length; show(); };
+$('#card').onclick = flip;
+$('#card').onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } };
+$('#flip').onclick = flip;
+$('#prev').onclick = () => go(-1);
+$('#next').onclick = () => go(1);
+$('#jump').onchange = e => { idx = order.findIndex(c => c.n == e.target.value); show(); };
+$('#shuf').onclick = () => {
+  shuffled = !shuffled; const cur = order[idx];
+  order = shuffled ? shuffle(CARDS) : CARDS.slice();
+  idx = order.indexOf(cur); $('#shuf').textContent = shuffled ? 'Original order' : 'Shuffle'; show();
+};
+document.addEventListener('keydown', e => {
+  if ($('#cards').hidden || e.target.tagName === 'SELECT') return;
+  if (e.key === 'ArrowRight') go(1); else if (e.key === 'ArrowLeft') go(-1);
+});
+show();
+
+/* quiz */
+let Q = null, lastN = 10;
+function setup() {
+  $('#quiz').innerHTML = `<div class="setup"><h2 style="font-family:var(--serif);margin-top:0">Pick a quiz length</h2>
+    <p>Each question shows a term and four descriptions. Choose the one that matches. Questions, answer choices, and their order are different every time.</p>
+    <div class="row"><button class="btn primary" data-n="10">10 questions</button><button class="btn primary" data-n="25">25 questions</button><button class="btn primary" data-n="53">All 53</button></div></div>`;
+  $('#quiz').querySelectorAll('[data-n]').forEach(b => b.onclick = () => start(+b.dataset.n));
+}
+function start(n) {
+  lastN = n;
+  Q = { i: 0, score: 0, missed: [], done: false, items: shuffle(CARDS).slice(0, n).map(c => ({ c, opts: shuffle([c, ...shuffle(CARDS.filter(x => x !== c)).slice(0, 3)]) })) };
+  ask();
+}
+function ask() {
+  const { c, opts } = Q.items[Q.i], n = Q.items.length;
+  $('#quiz').innerHTML = `<div class="qbar"><span>Question ${Q.i + 1} of ${n}</span><span>Score: ${Q.score}</span></div>
+    <div class="track"><i style="width:${Q.i / n * 100}%"></i></div>
+    <div class="qterm">${esc(c.front)}</div><p class="qhelp">Which description matches this term?</p>
+    <div id="opts">${opts.map((o, k) => `<button class="opt" data-k="${k}"><span class="let">${'ABCD'[k]}</span><span>${back(o)}</span></button>`).join('')}</div>
+    <div id="after"></div>`;
+  $('#opts').querySelectorAll('.opt').forEach(b => b.onclick = () => pick(+b.dataset.k));
+}
+function pick(k) {
+  const { c, opts } = Q.items[Q.i], ok = opts[k] === c;
+  if (ok) Q.score++; else Q.missed.push(c);
+  $('#opts').querySelectorAll('.opt').forEach((b, j) => { b.disabled = true; if (opts[j] === c) b.classList.add('right'); else if (j === k) b.classList.add('wrong'); });
+  const last = Q.i === Q.items.length - 1;
+  $('#after').innerHTML = `<div class="fb ${ok ? 'good' : 'bad'}">${ok ? 'Correct' : 'Not quite. The correct answer is highlighted in green.'}</div><div class="row" style="margin-top:0"><button class="btn primary" id="nx">${last ? 'See results' : 'Next question'}</button></div>`;
+  $('#nx').focus();
+  $('#nx').onclick = () => { if (last) results(); else { Q.i++; ask(); window.scrollTo(0, 0); } };
+}
+function results() {
+  const n = Q.items.length, pct = Math.round(Q.score / n * 100);
+  $('#quiz').innerHTML = `<div class="score">${Q.score} / ${n}</div><p style="text-align:center;color:var(--muted);margin-top:0">${pct}%</p>
+    <div class="row" style="margin-bottom:22px"><button class="btn primary" id="again">New ${n}-question quiz</button><button class="btn" id="chg">Change length</button></div>
+    ${Q.missed.length ? `<h3 style="font-family:var(--serif)">Review what you missed</h3>` + Q.missed.map(c => `<details><summary>${esc(c.front)}</summary>${back(c)}</details>`).join('') : '<p style="text-align:center"><b>Perfect score. Nothing to review.</b></p>'}`;
+  $('#again').onclick = () => start(lastN);
+  $('#chg').onclick = setup;
+  window.scrollTo(0, 0);
+}
+
+/* memory game: match each term to its "What is it?" definition */
+let G = null, lastP = 6;
+const defHTML = c => (c.what ? `<p style="margin:0">${esc(c.what)}</p>` : '') + (c.sub.length ? '<ul>' + c.sub.map(s => `<li>${esc(s)}</li>`).join('') + '</ul>' : '');
+function gsetup() {
+  $('#game').innerHTML = `<div class="setup"><h2 style="font-family:var(--serif);margin-top:0">Match terms to definitions</h2>
+    <p>Flip two tiles at a time. A term tile and the definition tile that describes it are a match. Matched pairs stay open, and you can read the full card for each one below the board. Cards and positions are different every game.</p>
+    <div class="row"><button class="btn primary" data-p="6">6 pairs</button><button class="btn primary" data-p="10">10 pairs</button><button class="btn primary" data-p="15">15 pairs</button></div></div>`;
+  $('#game').querySelectorAll('[data-p]').forEach(b => b.onclick = () => gstart(+b.dataset.p));
+}
+function gstart(p) {
+  lastP = p;
+  G = { p, moves: 0, open: [], found: [], lock: false, tiles: shuffle(shuffle(CARDS).slice(0, p).flatMap(c => [{ c, k: 'term' }, { c, k: 'def' }])) };
+  $('#game').innerHTML = `<div class="qbar"><span id="gm"></span><span id="gp"></span></div>
+    <div class="key"><span>Gold top: term</span><span>Grey top: definition</span></div>
+    <div id="gwin"></div>
+    <div class="grid" id="grid">${G.tiles.map((t, i) => `<button class="tile ${t.k}" data-i="${i}" aria-label="Face-down tile ${i + 1}"><div class="inner" style="display:grid"><div class="face down" style="grid-area:1/1;-webkit-backface-visibility:hidden;backface-visibility:hidden">?</div><div class="face up" style="grid-area:1/1;-webkit-backface-visibility:hidden;backface-visibility:hidden">${t.k === 'term' ? esc(t.c.front) : defHTML(t.c)}</div></div></button>`).join('')}</div>
+    <div class="row"><button class="btn" id="gnew">Restart with new cards</button><button class="btn" id="gchg">Change size</button></div>
+    <div id="gfound" style="margin-top:22px"></div>`;
+  gstat();
+  $('#grid').querySelectorAll('.tile').forEach(b => b.onclick = () => flipTile(b));
+  $('#gnew').onclick = () => gstart(lastP);
+  $('#gchg').onclick = gsetup;
+}
+function gstat() { $('#gm').textContent = `Moves: ${G.moves}`; $('#gp').textContent = `Pairs found: ${G.found.length} of ${G.p}`; }
+function flipTile(el) {
+  const i = +el.dataset.i;
+  if (G.lock || el.classList.contains('open') || el.classList.contains('done')) return;
+  el.classList.add('open'); G.open.push(i);
+  if (G.open.length < 2) return;
+  G.moves++;
+  const [a, b] = G.open, els = G.open.map(j => $('#grid').children[j]);
+  if (G.tiles[a].c === G.tiles[b].c) {
+    els.forEach(e => { e.classList.remove('open'); e.classList.add('done'); e.disabled = true; });
+    G.found.unshift(G.tiles[a].c); G.open = []; gstat();
+    $('#gfound').innerHTML = `<h3 style="font-family:var(--serif)">Matched cards</h3>` + G.found.map(c => `<details><summary>${esc(c.front)}</summary>${back(c)}</details>`).join('');
+    if (G.found.length === G.p) $('#gwin').innerHTML = `<div class="win"><b>You matched all ${G.p} pairs in ${G.moves} moves.</b><div class="row"><button class="btn primary" id="gagain">Play again</button></div></div>`, $('#gagain').onclick = () => gstart(lastP);
+  } else {
+    G.lock = true; gstat();
+    setTimeout(() => { els.forEach(e => e.classList.remove('open')); G.open = []; G.lock = false; }, 1300);
+  }
+}
+
+/* match game */
+let M = null, mTimer = null;
+const fmt = ms => (ms / 1000).toFixed(1) + 's';
+const getBest = n => { try { return +localStorage.getItem('apgov-best-' + n) || 0; } catch (e) { return 0; } };
+const setBest = (n, t) => { try { localStorage.setItem('apgov-best-' + n, t); } catch (e) {} };
+const defText = c => [c.what, ...c.sub].filter(Boolean).join(' ');
+function mSetup() {
+  clearInterval(mTimer);
+  $('#match').innerHTML = `<div class="setup"><h2 style="font-family:var(--serif);margin-top:0">Match the terms</h2>
+    <p>Match each term to its "What is it?" description. Tap two tiles, or drag one onto another. Matched tiles disappear. Clear the board as fast as you can.</p>
+    <div class="row">${[6, 8, 12].map(n => `<button class="btn primary" data-n="${n}">${n} pairs${getBest(n) ? ' (best ' + fmt(getBest(n)) + ')' : ''}</button>`).join('')}</div></div>`;
+  $('#match').querySelectorAll('[data-n]').forEach(b => b.onclick = () => mStart(+b.dataset.n));
+}
+function mStart(n) {
+  clearInterval(mTimer);
+  const cards = shuffle(CARDS).slice(0, n);
+  M = { n, left: n, miss: 0, sel: null, cards, done: false, t0: Date.now() };
+  $('#match').innerHTML = `<div class="qbar"><span id="mt">0.0s</span><span id="mm">Misses: 0</span></div><div class="mgrid" id="mg"></div>`;
+  shuffle(cards.flatMap(c => [{ c, k: 't' }, { c, k: 'd' }])).forEach(({ c, k }) => {
+    const el = document.createElement('div');
+    el.className = 'mtile'; el.dataset.k = k; el.dataset.id = c.n; el.tabIndex = 0; el.setAttribute('role', 'button');
+    el.textContent = k === 't' ? c.front : defText(c);
+    el.onpointerdown = down;
+    el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tap(el); } };
+    $('#mg').append(el);
+  });
+  mTimer = setInterval(() => { const t = $('#mt'); if (t) t.textContent = fmt(Date.now() - M.t0); }, 100);
+}
+const clearSel = () => { if (M.sel) M.sel.classList.remove('sel'); M.sel = null; };
+function tap(el) {
+  if (M.sel === el) return clearSel();
+  if (M.sel && M.sel.dataset.k !== el.dataset.k) return attempt(M.sel, el);
+  clearSel(); M.sel = el; el.classList.add('sel');
+}
+function attempt(a, b) {
+  clearSel();
+  if (a.dataset.id === b.dataset.id) { a.classList.add('gone'); b.classList.add('gone'); if (--M.left === 0) mDone(); }
+  else { M.miss++; $('#mm').textContent = 'Misses: ' + M.miss; [a, b].forEach(x => { x.classList.add('bad'); setTimeout(() => x.classList.remove('bad'), 500); }); }
+}
+function down(e) {
+  const el = e.currentTarget;
+  if (M.done || el.classList.contains('gone')) return;
+  const sx = e.clientX, sy = e.clientY; let drag = false;
+  el.setPointerCapture(e.pointerId);
+  const move = ev => {
+    const dx = ev.clientX - sx, dy = ev.clientY - sy;
+    if (!drag && Math.hypot(dx, dy) > 8) { drag = true; el.classList.add('drag'); }
+    if (drag) el.style.transform = `translate(${dx}px,${dy}px)`;
+  };
+  const up = ev => {
+    el.removeEventListener('pointermove', move); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up);
+    el.style.transform = ''; el.classList.remove('drag');
+    if (ev.type === 'pointercancel') return;
+    if (!drag) return tap(el);
+    el.style.visibility = 'hidden';
+    const hit = document.elementFromPoint(ev.clientX, ev.clientY); el.style.visibility = '';
+    const t = hit && hit.closest('.mtile');
+    if (t && t !== el && !t.classList.contains('gone') && t.dataset.k !== el.dataset.k) attempt(el, t);
+  };
+  el.addEventListener('pointermove', move); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+}
+function mDone() {
+  clearInterval(mTimer); M.done = true;
+  const t = Date.now() - M.t0, best = getBest(M.n), nb = !best || t < best;
+  if (nb) setBest(M.n, t);
+  setTimeout(() => {
+    $('#match').innerHTML = `<div class="score">${fmt(t)}</div>
+      <p style="text-align:center;color:var(--muted);margin-top:0">${M.miss} ${M.miss === 1 ? 'miss' : 'misses'}. ${nb ? 'New best time for ' + M.n + ' pairs!' : 'Best for ' + M.n + ' pairs: ' + fmt(best)}</p>
+      <div class="row" style="margin-bottom:22px"><button class="btn primary" id="mag">Play ${M.n} new pairs</button><button class="btn" id="mchg">Change size</button></div>
+      <h3 style="font-family:var(--serif)">Review these cards</h3>` + M.cards.map(c => `<details><summary>${esc(c.front)}</summary>${back(c)}</details>`).join('');
+    $('#mag').onclick = () => mStart(M.n); $('#mchg').onclick = mSetup;
+    window.scrollTo(0, 0);
+  }, 500);
+}
+</script>
+</body>
+</html>
